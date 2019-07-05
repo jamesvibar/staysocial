@@ -3,19 +3,20 @@ const express = require("express");
 const api = require("./api");
 
 const connectDb = require("./database");
-2;
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const dev = process.env.NODE_ENV !== "production";
 const port = process.env.PORT || 3000;
 const siteUrl = dev ? `http://localhost:${port}` : process.env.SITE_URL;
-
-const mongoUri =
-  "mongodb+srv://staysocialadmin:XhCzPg2ybHg0Zawl@staysocialph-xrhtd.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 (async () => {
-  await connectDb(mongoUri, { useNewUrlParser: true });
+  await connectDb(process.env.MONGO_URI, { useNewUrlParser: true });
 
   await app.prepare();
   const server = express();
